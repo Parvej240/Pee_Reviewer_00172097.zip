@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="Peer_ReviewrDBModelStoreContainer" CdmEntityContainer="Peer_ReviewrDBEntities">
+    <EntitySetMapping Name="Accounts">
+      <EntityTypeMapping TypeName="Peer_ReviewrDBModel.Account">
+        <MappingFragment StoreEntitySet="Account">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Pass" ColumnName="Pass" />
+          <ScalarProperty Name="uType" ColumnName="uType" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Authors">
+      <EntityTypeMapping TypeName="Peer_ReviewrDBModel.Author">
+        <MappingFragment StoreEntitySet="Author">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="DOB" ColumnName="DOB" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AuthorSkills">
+      <EntityTypeMapping TypeName="Peer_ReviewrDBModel.AuthorSkill">
+        <MappingFragment StoreEntitySet="AuthorSkill">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="authorId" ColumnName="authorId" />
+          <ScalarProperty Name="skillId" ColumnName="skillId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Comments">
+      <EntityTypeMapping TypeName="Peer_ReviewrDBModel.Comment">
+        <MappingFragment StoreEntitySet="Comment">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="peerRevId" ColumnName="peerRevId" />
+          <ScalarProperty Name="Remark" ColumnName="Remark" />
+          <ScalarProperty Name="cDate" ColumnName="cDate" />
+          <ScalarProperty Name="skillId" ColumnName="skillId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Conferences">
+      <EntityTypeMapping TypeName="Peer_ReviewrDBModel.Conference">
+        <MappingFragment StoreEntitySet="Conference">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PeerReviews">
+      <EntityTypeMapping TypeName="Peer_ReviewrDBModel.PeerReview">
+        <MappingFragment StoreEntitySet="PeerReview">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="DOR" ColumnName="DOR" />
+          <ScalarProperty Name="reviewerId" ColumnName="reviewerId" />
+          <ScalarProperty Name="docId" ColumnName="docId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Ratings">
+      <EntityTypeMapping TypeName="Peer_ReviewrDBModel.Rating">
+        <MappingFragment StoreEntitySet="Rating">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="RatingValue" ColumnName="RatingValue" />
+          <ScalarProperty Name="commentId" ColumnName="commentId" />
+          <ScalarProperty Name="authorDocId" ColumnName="authorDocId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ResearchWorks">
+      <EntityTypeMapping TypeName="Peer_ReviewrDBModel.ResearchWork">
+        <MappingFragment StoreEntitySet="ResearchWork">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Doc" ColumnName="Doc" />
+          <ScalarProperty Name="uDate" ColumnName="uDate" />
+          <ScalarProperty Name="dType" ColumnName="dType" />
+          <ScalarProperty Name="aId" ColumnName="aId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Reviewers">
+      <EntityTypeMapping TypeName="Peer_ReviewrDBModel.Reviewer">
+        <MappingFragment StoreEntitySet="Reviewer">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="DOB" ColumnName="DOB" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ReviewerSkills">
+      <EntityTypeMapping TypeName="Peer_ReviewrDBModel.ReviewerSkill">
+        <MappingFragment StoreEntitySet="ReviewerSkill">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="reviewerId" ColumnName="reviewerId" />
+          <ScalarProperty Name="skillId" ColumnName="skillId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Skills">
+      <EntityTypeMapping TypeName="Peer_ReviewrDBModel.Skill">
+        <MappingFragment StoreEntitySet="Skill">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Desscription" ColumnName="Desscription" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="DocumentTag" TypeName="Peer_ReviewrDBModel.DocumentTag" StoreEntitySet="DocumentTag">
+      <EndProperty Name="ResearchWork">
+        <ScalarProperty Name="Id" ColumnName="docId" />
+      </EndProperty>
+      <EndProperty Name="Skill">
+        <ScalarProperty Name="Id" ColumnName="skillId" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping>

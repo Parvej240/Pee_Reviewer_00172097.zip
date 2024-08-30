@@ -1,0 +1,805 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Peer_ReviewrDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Account">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+          <Property Name="Pass" Type="varchar" MaxLength="50" />
+          <Property Name="uType" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Author">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+          <Property Name="DOB" Type="date" />
+        </EntityType>
+        <EntityType Name="AuthorSkill">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="authorId" Type="int" />
+          <Property Name="skillId" Type="int" />
+        </EntityType>
+        <EntityType Name="Comment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="peerRevId" Type="int" />
+          <Property Name="Remark" Type="varchar(max)" />
+          <Property Name="cDate" Type="date" />
+          <Property Name="skillId" Type="int" />
+        </EntityType>
+        <EntityType Name="Conference">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="varchar" MaxLength="50" />
+          <Property Name="StartDate" Type="date" />
+        </EntityType>
+        <EntityType Name="DocumentTag">
+          <Key>
+            <PropertyRef Name="docId" />
+          </Key>
+          <Property Name="docId" Type="int" Nullable="false" />
+          <Property Name="skillId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PeerReview">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DOR" Type="date" />
+          <Property Name="reviewerId" Type="int" />
+          <Property Name="docId" Type="int" />
+        </EntityType>
+        <EntityType Name="Rating">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RatingValue" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="commentId" Type="int" />
+          <Property Name="authorDocId" Type="int" />
+        </EntityType>
+        <EntityType Name="ResearchWork">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Doc" Type="varchar" MaxLength="50" />
+          <Property Name="uDate" Type="date" />
+          <Property Name="dType" Type="varchar" MaxLength="50" />
+          <Property Name="aId" Type="int" />
+        </EntityType>
+        <EntityType Name="Reviewer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+          <Property Name="DOB" Type="date" />
+        </EntityType>
+        <EntityType Name="ReviewerSkill">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="reviewerId" Type="int" Nullable="false" />
+          <Property Name="skillId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Skill">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" />
+          <Property Name="Desscription" Type="varchar(max)" />
+        </EntityType>
+        <Association Name="FK_Comment1_ToTable">
+          <End Role="PeerReview" Type="Self.PeerReview" Multiplicity="0..1" />
+          <End Role="Comment" Type="Self.Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PeerReview">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Comment">
+              <PropertyRef Name="peerRevId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Comment2_ToTable">
+          <End Role="Skill" Type="Self.Skill" Multiplicity="0..1" />
+          <End Role="Comment" Type="Self.Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Skill">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Comment">
+              <PropertyRef Name="skillId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rating1_ToTable">
+          <End Role="Comment" Type="Self.Comment" Multiplicity="0..1" />
+          <End Role="Rating" Type="Self.Rating" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Comment">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Rating">
+              <PropertyRef Name="commentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rating2_ToTable">
+          <End Role="ResearchWork" Type="Self.ResearchWork" Multiplicity="0..1" />
+          <End Role="Rating" Type="Self.Rating" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ResearchWork">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Rating">
+              <PropertyRef Name="authorDocId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Work_ASkill1">
+          <End Role="Author" Type="Self.Author" Multiplicity="0..1" />
+          <End Role="AuthorSkill" Type="Self.AuthorSkill" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Author">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AuthorSkill">
+              <PropertyRef Name="authorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Work_ASkill2">
+          <End Role="Skill" Type="Self.Skill" Multiplicity="0..1" />
+          <End Role="AuthorSkill" Type="Self.AuthorSkill" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Skill">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AuthorSkill">
+              <PropertyRef Name="skillId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Work_docskill1">
+          <End Role="ResearchWork" Type="Self.ResearchWork" Multiplicity="1" />
+          <End Role="DocumentTag" Type="Self.DocumentTag" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="ResearchWork">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DocumentTag">
+              <PropertyRef Name="docId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Work_docskill2">
+          <End Role="Skill" Type="Self.Skill" Multiplicity="1" />
+          <End Role="DocumentTag" Type="Self.DocumentTag" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Skill">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DocumentTag">
+              <PropertyRef Name="skillId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Work_reerRev1">
+          <End Role="Reviewer" Type="Self.Reviewer" Multiplicity="0..1" />
+          <End Role="PeerReview" Type="Self.PeerReview" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Reviewer">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PeerReview">
+              <PropertyRef Name="reviewerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Work_reerRev2">
+          <End Role="ResearchWork" Type="Self.ResearchWork" Multiplicity="0..1" />
+          <End Role="PeerReview" Type="Self.PeerReview" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ResearchWork">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PeerReview">
+              <PropertyRef Name="docId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Work_revsill1">
+          <End Role="Reviewer" Type="Self.Reviewer" Multiplicity="1" />
+          <End Role="ReviewerSkill" Type="Self.ReviewerSkill" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Reviewer">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ReviewerSkill">
+              <PropertyRef Name="reviewerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Work_revsill2">
+          <End Role="Skill" Type="Self.Skill" Multiplicity="1" />
+          <End Role="ReviewerSkill" Type="Self.ReviewerSkill" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Skill">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ReviewerSkill">
+              <PropertyRef Name="skillId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Work_ToTable">
+          <End Role="Author" Type="Self.Author" Multiplicity="0..1" />
+          <End Role="ResearchWork" Type="Self.ResearchWork" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Author">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ResearchWork">
+              <PropertyRef Name="aId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Peer_ReviewrDBModelStoreContainer">
+          <EntitySet Name="Account" EntityType="Self.Account" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Author" EntityType="Self.Author" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AuthorSkill" EntityType="Self.AuthorSkill" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Comment" EntityType="Self.Comment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Conference" EntityType="Self.Conference" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DocumentTag" EntityType="Self.DocumentTag" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PeerReview" EntityType="Self.PeerReview" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Rating" EntityType="Self.Rating" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ResearchWork" EntityType="Self.ResearchWork" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Reviewer" EntityType="Self.Reviewer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ReviewerSkill" EntityType="Self.ReviewerSkill" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Skill" EntityType="Self.Skill" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Comment1_ToTable" Association="Self.FK_Comment1_ToTable">
+            <End Role="PeerReview" EntitySet="PeerReview" />
+            <End Role="Comment" EntitySet="Comment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comment2_ToTable" Association="Self.FK_Comment2_ToTable">
+            <End Role="Skill" EntitySet="Skill" />
+            <End Role="Comment" EntitySet="Comment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rating1_ToTable" Association="Self.FK_Rating1_ToTable">
+            <End Role="Comment" EntitySet="Comment" />
+            <End Role="Rating" EntitySet="Rating" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rating2_ToTable" Association="Self.FK_Rating2_ToTable">
+            <End Role="ResearchWork" EntitySet="ResearchWork" />
+            <End Role="Rating" EntitySet="Rating" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Work_ASkill1" Association="Self.FK_Work_ASkill1">
+            <End Role="Author" EntitySet="Author" />
+            <End Role="AuthorSkill" EntitySet="AuthorSkill" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Work_ASkill2" Association="Self.FK_Work_ASkill2">
+            <End Role="Skill" EntitySet="Skill" />
+            <End Role="AuthorSkill" EntitySet="AuthorSkill" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Work_docskill1" Association="Self.FK_Work_docskill1">
+            <End Role="ResearchWork" EntitySet="ResearchWork" />
+            <End Role="DocumentTag" EntitySet="DocumentTag" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Work_docskill2" Association="Self.FK_Work_docskill2">
+            <End Role="Skill" EntitySet="Skill" />
+            <End Role="DocumentTag" EntitySet="DocumentTag" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Work_reerRev1" Association="Self.FK_Work_reerRev1">
+            <End Role="Reviewer" EntitySet="Reviewer" />
+            <End Role="PeerReview" EntitySet="PeerReview" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Work_reerRev2" Association="Self.FK_Work_reerRev2">
+            <End Role="ResearchWork" EntitySet="ResearchWork" />
+            <End Role="PeerReview" EntitySet="PeerReview" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Work_revsill1" Association="Self.FK_Work_revsill1">
+            <End Role="Reviewer" EntitySet="Reviewer" />
+            <End Role="ReviewerSkill" EntitySet="ReviewerSkill" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Work_revsill2" Association="Self.FK_Work_revsill2">
+            <End Role="Skill" EntitySet="Skill" />
+            <End Role="ReviewerSkill" EntitySet="ReviewerSkill" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Work_ToTable" Association="Self.FK_Work_ToTable">
+            <End Role="Author" EntitySet="Author" />
+            <End Role="ResearchWork" EntitySet="ResearchWork" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Peer_ReviewrDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Account">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Pass" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="uType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Author">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DOB" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="AuthorSkills" Relationship="Self.FK_Work_ASkill1" FromRole="Author" ToRole="AuthorSkill" />
+          <NavigationProperty Name="ResearchWorks" Relationship="Self.FK_Work_ToTable" FromRole="Author" ToRole="ResearchWork" />
+        </EntityType>
+        <EntityType Name="AuthorSkill">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="authorId" Type="Int32" />
+          <Property Name="skillId" Type="Int32" />
+          <NavigationProperty Name="Author" Relationship="Self.FK_Work_ASkill1" FromRole="AuthorSkill" ToRole="Author" />
+          <NavigationProperty Name="Skill" Relationship="Self.FK_Work_ASkill2" FromRole="AuthorSkill" ToRole="Skill" />
+        </EntityType>
+        <EntityType Name="Comment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="peerRevId" Type="Int32" />
+          <Property Name="Remark" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="cDate" Type="DateTime" Precision="0" />
+          <Property Name="skillId" Type="Int32" />
+          <NavigationProperty Name="PeerReview" Relationship="Self.FK_Comment1_ToTable" FromRole="Comment" ToRole="PeerReview" />
+          <NavigationProperty Name="Skill" Relationship="Self.FK_Comment2_ToTable" FromRole="Comment" ToRole="Skill" />
+          <NavigationProperty Name="Ratings" Relationship="Self.FK_Rating1_ToTable" FromRole="Comment" ToRole="Rating" />
+        </EntityType>
+        <EntityType Name="Conference">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="StartDate" Type="DateTime" Precision="0" />
+        </EntityType>
+        <EntityType Name="PeerReview">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DOR" Type="DateTime" Precision="0" />
+          <Property Name="reviewerId" Type="Int32" />
+          <Property Name="docId" Type="Int32" />
+          <NavigationProperty Name="Comments" Relationship="Self.FK_Comment1_ToTable" FromRole="PeerReview" ToRole="Comment" />
+          <NavigationProperty Name="Reviewer" Relationship="Self.FK_Work_reerRev1" FromRole="PeerReview" ToRole="Reviewer" />
+          <NavigationProperty Name="ResearchWork" Relationship="Self.FK_Work_reerRev2" FromRole="PeerReview" ToRole="ResearchWork" />
+        </EntityType>
+        <EntityType Name="Rating">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RatingValue" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="commentId" Type="Int32" />
+          <Property Name="authorDocId" Type="Int32" />
+          <NavigationProperty Name="Comment" Relationship="Self.FK_Rating1_ToTable" FromRole="Rating" ToRole="Comment" />
+          <NavigationProperty Name="ResearchWork" Relationship="Self.FK_Rating2_ToTable" FromRole="Rating" ToRole="ResearchWork" />
+        </EntityType>
+        <EntityType Name="ResearchWork">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Doc" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="uDate" Type="DateTime" Precision="0" />
+          <Property Name="dType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="aId" Type="Int32" />
+          <NavigationProperty Name="Author" Relationship="Self.FK_Work_ToTable" FromRole="ResearchWork" ToRole="Author" />
+          <NavigationProperty Name="PeerReviews" Relationship="Self.FK_Work_reerRev2" FromRole="ResearchWork" ToRole="PeerReview" />
+          <NavigationProperty Name="Ratings" Relationship="Self.FK_Rating2_ToTable" FromRole="ResearchWork" ToRole="Rating" />
+          <NavigationProperty Name="Skill" Relationship="Self.DocumentTag" FromRole="ResearchWork" ToRole="Skill" />
+        </EntityType>
+        <EntityType Name="Reviewer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DOB" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="PeerReviews" Relationship="Self.FK_Work_reerRev1" FromRole="Reviewer" ToRole="PeerReview" />
+          <NavigationProperty Name="ReviewerSkills" Relationship="Self.FK_Work_revsill1" FromRole="Reviewer" ToRole="ReviewerSkill" />
+        </EntityType>
+        <EntityType Name="ReviewerSkill">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="reviewerId" Type="Int32" Nullable="false" />
+          <Property Name="skillId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Reviewer" Relationship="Self.FK_Work_revsill1" FromRole="ReviewerSkill" ToRole="Reviewer" />
+          <NavigationProperty Name="Skill" Relationship="Self.FK_Work_revsill2" FromRole="ReviewerSkill" ToRole="Skill" />
+        </EntityType>
+        <EntityType Name="Skill">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Desscription" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="AuthorSkills" Relationship="Self.FK_Work_ASkill2" FromRole="Skill" ToRole="AuthorSkill" />
+          <NavigationProperty Name="Comments" Relationship="Self.FK_Comment2_ToTable" FromRole="Skill" ToRole="Comment" />
+          <NavigationProperty Name="ReviewerSkills" Relationship="Self.FK_Work_revsill2" FromRole="Skill" ToRole="ReviewerSkill" />
+          <NavigationProperty Name="ResearchWorks" Relationship="Self.DocumentTag" FromRole="Skill" ToRole="ResearchWork" />
+        </EntityType>
+        <Association Name="FK_Work_ASkill1">
+          <End Role="Author" Type="Self.Author" Multiplicity="0..1" />
+          <End Role="AuthorSkill" Type="Self.AuthorSkill" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Author">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AuthorSkill">
+              <PropertyRef Name="authorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Work_ToTable">
+          <End Role="Author" Type="Self.Author" Multiplicity="0..1" />
+          <End Role="ResearchWork" Type="Self.ResearchWork" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Author">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ResearchWork">
+              <PropertyRef Name="aId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Work_ASkill2">
+          <End Role="Skill" Type="Self.Skill" Multiplicity="0..1" />
+          <End Role="AuthorSkill" Type="Self.AuthorSkill" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Skill">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AuthorSkill">
+              <PropertyRef Name="skillId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Comment1_ToTable">
+          <End Role="PeerReview" Type="Self.PeerReview" Multiplicity="0..1" />
+          <End Role="Comment" Type="Self.Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PeerReview">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Comment">
+              <PropertyRef Name="peerRevId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Comment2_ToTable">
+          <End Role="Skill" Type="Self.Skill" Multiplicity="0..1" />
+          <End Role="Comment" Type="Self.Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Skill">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Comment">
+              <PropertyRef Name="skillId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rating1_ToTable">
+          <End Role="Comment" Type="Self.Comment" Multiplicity="0..1" />
+          <End Role="Rating" Type="Self.Rating" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Comment">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Rating">
+              <PropertyRef Name="commentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Work_reerRev1">
+          <End Role="Reviewer" Type="Self.Reviewer" Multiplicity="0..1" />
+          <End Role="PeerReview" Type="Self.PeerReview" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Reviewer">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PeerReview">
+              <PropertyRef Name="reviewerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Work_reerRev2">
+          <End Role="ResearchWork" Type="Self.ResearchWork" Multiplicity="0..1" />
+          <End Role="PeerReview" Type="Self.PeerReview" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ResearchWork">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PeerReview">
+              <PropertyRef Name="docId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rating2_ToTable">
+          <End Role="ResearchWork" Type="Self.ResearchWork" Multiplicity="0..1" />
+          <End Role="Rating" Type="Self.Rating" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ResearchWork">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Rating">
+              <PropertyRef Name="authorDocId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Work_revsill1">
+          <End Role="Reviewer" Type="Self.Reviewer" Multiplicity="1" />
+          <End Role="ReviewerSkill" Type="Self.ReviewerSkill" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Reviewer">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ReviewerSkill">
+              <PropertyRef Name="reviewerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Work_revsill2">
+          <End Role="Skill" Type="Self.Skill" Multiplicity="1" />
+          <End Role="ReviewerSkill" Type="Self.ReviewerSkill" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Skill">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ReviewerSkill">
+              <PropertyRef Name="skillId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="DocumentTag">
+          <End Role="ResearchWork" Type="Self.ResearchWork" Multiplicity="*" />
+          <End Role="Skill" Type="Self.Skill" Multiplicity="0..1" />
+        </Association>
+        <EntityContainer Name="Peer_ReviewrDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Accounts" EntityType="Self.Account" />
+          <EntitySet Name="Authors" EntityType="Self.Author" />
+          <EntitySet Name="AuthorSkills" EntityType="Self.AuthorSkill" />
+          <EntitySet Name="Comments" EntityType="Self.Comment" />
+          <EntitySet Name="Conferences" EntityType="Self.Conference" />
+          <EntitySet Name="PeerReviews" EntityType="Self.PeerReview" />
+          <EntitySet Name="Ratings" EntityType="Self.Rating" />
+          <EntitySet Name="ResearchWorks" EntityType="Self.ResearchWork" />
+          <EntitySet Name="Reviewers" EntityType="Self.Reviewer" />
+          <EntitySet Name="ReviewerSkills" EntityType="Self.ReviewerSkill" />
+          <EntitySet Name="Skills" EntityType="Self.Skill" />
+          <AssociationSet Name="FK_Work_ASkill1" Association="Self.FK_Work_ASkill1">
+            <End Role="Author" EntitySet="Authors" />
+            <End Role="AuthorSkill" EntitySet="AuthorSkills" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Work_ToTable" Association="Self.FK_Work_ToTable">
+            <End Role="Author" EntitySet="Authors" />
+            <End Role="ResearchWork" EntitySet="ResearchWorks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Work_ASkill2" Association="Self.FK_Work_ASkill2">
+            <End Role="Skill" EntitySet="Skills" />
+            <End Role="AuthorSkill" EntitySet="AuthorSkills" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comment1_ToTable" Association="Self.FK_Comment1_ToTable">
+            <End Role="PeerReview" EntitySet="PeerReviews" />
+            <End Role="Comment" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comment2_ToTable" Association="Self.FK_Comment2_ToTable">
+            <End Role="Skill" EntitySet="Skills" />
+            <End Role="Comment" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rating1_ToTable" Association="Self.FK_Rating1_ToTable">
+            <End Role="Comment" EntitySet="Comments" />
+            <End Role="Rating" EntitySet="Ratings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Work_reerRev1" Association="Self.FK_Work_reerRev1">
+            <End Role="Reviewer" EntitySet="Reviewers" />
+            <End Role="PeerReview" EntitySet="PeerReviews" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Work_reerRev2" Association="Self.FK_Work_reerRev2">
+            <End Role="ResearchWork" EntitySet="ResearchWorks" />
+            <End Role="PeerReview" EntitySet="PeerReviews" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rating2_ToTable" Association="Self.FK_Rating2_ToTable">
+            <End Role="ResearchWork" EntitySet="ResearchWorks" />
+            <End Role="Rating" EntitySet="Ratings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Work_revsill1" Association="Self.FK_Work_revsill1">
+            <End Role="Reviewer" EntitySet="Reviewers" />
+            <End Role="ReviewerSkill" EntitySet="ReviewerSkills" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Work_revsill2" Association="Self.FK_Work_revsill2">
+            <End Role="Skill" EntitySet="Skills" />
+            <End Role="ReviewerSkill" EntitySet="ReviewerSkills" />
+          </AssociationSet>
+          <AssociationSet Name="DocumentTag" Association="Self.DocumentTag">
+            <End Role="ResearchWork" EntitySet="ResearchWorks" />
+            <End Role="Skill" EntitySet="Skills" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Peer_ReviewrDBModelStoreContainer" CdmEntityContainer="Peer_ReviewrDBEntities">
+          <EntitySetMapping Name="Accounts">
+            <EntityTypeMapping TypeName="Peer_ReviewrDBModel.Account">
+              <MappingFragment StoreEntitySet="Account">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Pass" ColumnName="Pass" />
+                <ScalarProperty Name="uType" ColumnName="uType" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Authors">
+            <EntityTypeMapping TypeName="Peer_ReviewrDBModel.Author">
+              <MappingFragment StoreEntitySet="Author">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AuthorSkills">
+            <EntityTypeMapping TypeName="Peer_ReviewrDBModel.AuthorSkill">
+              <MappingFragment StoreEntitySet="AuthorSkill">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="authorId" ColumnName="authorId" />
+                <ScalarProperty Name="skillId" ColumnName="skillId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Comments">
+            <EntityTypeMapping TypeName="Peer_ReviewrDBModel.Comment">
+              <MappingFragment StoreEntitySet="Comment">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="peerRevId" ColumnName="peerRevId" />
+                <ScalarProperty Name="Remark" ColumnName="Remark" />
+                <ScalarProperty Name="cDate" ColumnName="cDate" />
+                <ScalarProperty Name="skillId" ColumnName="skillId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Conferences">
+            <EntityTypeMapping TypeName="Peer_ReviewrDBModel.Conference">
+              <MappingFragment StoreEntitySet="Conference">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PeerReviews">
+            <EntityTypeMapping TypeName="Peer_ReviewrDBModel.PeerReview">
+              <MappingFragment StoreEntitySet="PeerReview">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="DOR" ColumnName="DOR" />
+                <ScalarProperty Name="reviewerId" ColumnName="reviewerId" />
+                <ScalarProperty Name="docId" ColumnName="docId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Ratings">
+            <EntityTypeMapping TypeName="Peer_ReviewrDBModel.Rating">
+              <MappingFragment StoreEntitySet="Rating">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="RatingValue" ColumnName="RatingValue" />
+                <ScalarProperty Name="commentId" ColumnName="commentId" />
+                <ScalarProperty Name="authorDocId" ColumnName="authorDocId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ResearchWorks">
+            <EntityTypeMapping TypeName="Peer_ReviewrDBModel.ResearchWork">
+              <MappingFragment StoreEntitySet="ResearchWork">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Doc" ColumnName="Doc" />
+                <ScalarProperty Name="uDate" ColumnName="uDate" />
+                <ScalarProperty Name="dType" ColumnName="dType" />
+                <ScalarProperty Name="aId" ColumnName="aId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Reviewers">
+            <EntityTypeMapping TypeName="Peer_ReviewrDBModel.Reviewer">
+              <MappingFragment StoreEntitySet="Reviewer">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ReviewerSkills">
+            <EntityTypeMapping TypeName="Peer_ReviewrDBModel.ReviewerSkill">
+              <MappingFragment StoreEntitySet="ReviewerSkill">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="reviewerId" ColumnName="reviewerId" />
+                <ScalarProperty Name="skillId" ColumnName="skillId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Skills">
+            <EntityTypeMapping TypeName="Peer_ReviewrDBModel.Skill">
+              <MappingFragment StoreEntitySet="Skill">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Desscription" ColumnName="Desscription" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="DocumentTag" TypeName="Peer_ReviewrDBModel.DocumentTag" StoreEntitySet="DocumentTag">
+            <EndProperty Name="ResearchWork">
+              <ScalarProperty Name="Id" ColumnName="docId" />
+            </EndProperty>
+            <EndProperty Name="Skill">
+              <ScalarProperty Name="Id" ColumnName="skillId" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
